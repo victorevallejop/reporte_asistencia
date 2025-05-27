@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Informe PreUCV</title>
+  <style>
+    @media print {
+      body {
+        margin: 0;
+        background: white;
+      }
+      .pagina {
+        box-shadow: none;
+        margin: 0;
+      }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+
+    .pagina {
+      width: 8.5in;
+      height: 13in;
+      background: white;
+      margin: auto;
+      padding: 0;
+      box-sizing: border-box;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    @font-face {
+      font-family: 'BorisBlackBloxx';
+      src: url('https://fonts.cdnfonts.com/s/6905/BorisBlackBloxx.woff') format('woff');
+    }
+
+    .bloxx-estilo {
+      font-family: 'BorisBlackBloxx', sans-serif;
+      font-size: 32px;
+      font-weight: bold;
+      color: #28A8EA;
+      margin-top: 0px;
+      text-align: center;
+    }
+
+    .bloxx-estilo-subtitulo {
+      font-family: 'BorisBlackBloxx', sans-serif;
+      font-size: 16px;
+      font-weight: normal;
+      color: #28A8EA;
+      margin-top: 0px;
+      text-align: center;
+    }
+
+    .cabecera-contenedor {
+      display: flex;
+      width: 100%;
+      margin-top: 0.2in;
+    }
+
+    .izquierdo {
+      width: 1.6in;
+    }
+
+    .derecha {
+      width: calc(100% - 1.6in);
+    }
+
+    .info-estudiante {
+      padding: 15px;
+      margin: 10px auto;
+      border: 2px solid #009fe3;
+      border-radius: 10px;
+      background: none;
+      width: calc(100% - 100px);
+    }
+
+    .info-estudiante table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: none;
+    }
+
+    .info-estudiante td {
+      padding: 4px 10px;
+      vertical-align: top;
+      border: none;
+      text-align: left;
+      background: none;
+    }
+
+    .info-estudiante td:first-child {
+      color: #009fe3;
+      font-weight: bold;
+      width: 40%;
+    }
+
+    .info-estudiante td:last-child {
+      color: #000000;
+    }
+
+    .tabla-bloque {
+      margin: 20px auto;
+      padding: 0px 0px;
+      width: calc(100% - 40px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    th {
+      background-color: #009fe3;
+      color: white;
+      padding: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: center;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 1;
+      width: 100%;
+      background: #eeeeee;
+      padding: 5px;
+      font-size: 10px;
+      text-align: center;
+      color: #333;
+    }
+
+    .seccion-titulo {
+      font-weight: bold;
+      font-size: 14px;
+      background-color: #009fe3;
+      color: white;
+      padding: 5px;
+      margin-top: 30px;
+      border-radius: 5px 5px 0 0;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div style="margin: 20px auto; text-align: center;">
+    <input type="text" id="username" placeholder="Ingrese el username" style="padding: 10px; width: 300px;"/>
+    <button onclick="consultar()" style="padding: 10px 20px; background-color: #009fe3; color: white; border: none; border-radius: 5px; cursor: pointer;">Cargar Informe</button>
+  </div>
+
+  <div id="contenido" class="pagina" style="display: none;"></div>
+
+  <button onclick="generarPDF()" id="btn-pdf" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 9999; padding: 10px 20px; background-color: #009fe3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">Descargar PDF</button>
+
+<script>
+  function consultar() {
+    const username = document.getElementById('username').value;
+    const url = `https://script.google.com/macros/s/AKfycbw1234567.../exec?username=${encodeURIComponent(username)}`; // Reemplaza con tu URL
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.error) {
+          alert('Usuario no encontrado o error en la consulta');
+          return;
+        }
+        renderHTML(data);
+        document.getElementById('btn-pdf').style.display = 'inline-block';
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error en la solicitud.');
+      });
+  }
+
+  function renderHTML(data) {
+    const fecha = new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+    const contenido = `
+      <div style="position:absolute; width:8.5in; z-index:1; margin:0; padding:0;"><img src="https://img.mailinblue.com/6008034/images/content_library/original/68351949084d36608da54176.png" style="width:8.5in;"></div>
+      <div style="position:relative; width:8.5in; z-index:1;"><br><br><br><br></div>
+      <div class="cabecera-contenedor">
+        <div class="izquierdo">
+          <img src="https://img.mailinblue.com/6008034/images/content_library/original/68351949fb96cf9bb7e33b78.jpg" style="max-width: 80%; margin-left: 40px; height: 4in;">
+        </div>
+        <div class="derecha">
+          <div class="bloxx-estilo">INFORME</div>
+          <div class="bloxx-estilo-subtitulo">REPORTE DE ASISTENCIA<br>A ASIGNATURAS Y RENDIMIENTO</div>
+          <div class="info-estudiante">
+            <table>
+              <tr><td>RUT Estudiante:</td><td>${data.rutEstudiante}</td></tr>
+              <tr><td>Estudiante:</td><td>${data.estudiante}</td></tr>
+              <tr><td>RUT Apoderado:</td><td>${data.rutApoderado}</td></tr>
+              <tr><td>Apoderado:</td><td>${data.apoderado}</td></tr>
+              <tr><td>Programa:</td><td>${data.programa}</td></tr>
+              <tr><td>Sigla Programa:</td><td>${data.sigla}</td></tr>
+              <tr><td>Servicios Contratados:</td><td>${data.servicios}</td></tr>
+              <tr><td>Modalidad:</td><td>${data.modalidad}</td></tr>
+              <tr><td>Fecha Elaboración Informe:</td><td>${fecha}</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      ${data.bloqueAsistencia}
+      ${data.bloqueEnsayos}
+      <div class="footer">Departamento de Docencia – Preuniversitario PreUCV</div>
+      <div style="position:absolute;bottom:0;"><img src="https://img.mailinblue.com/6008034/images/content_library/original/68352394efff1dd0244e2686.png" style="width:8.5in; height:auto;"></div>
+    `;
+    const contenedor = document.getElementById('contenido');
+    contenedor.innerHTML = contenido;
+    contenedor.style.display = 'block';
+  }
+
+  function generarPDF() {
+    const element = document.querySelector('.pagina');
+    const opt = {
+      margin: 0,
+      filename: 'informe_preucv.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: [8.7, 13], orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+</body>
+</html>
