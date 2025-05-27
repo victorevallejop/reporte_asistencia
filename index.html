@@ -168,8 +168,14 @@
   <button onclick="generarPDF()" id="btn-pdf" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 9999; padding: 10px 20px; background-color: #009fe3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">Descargar PDF</button>
 
 <script>
-  function consultar() {
-    const username = document.getElementById('username').value;
+  // Obtiene el parámetro 'username' desde la URL
+  function obtenerParametroUsername() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('username');
+  }
+  
+  function consultar(username) {
+    // const username = document.getElementById('username').value;
     const url = `https://script.google.com/macros/s/AKfycbyXb_HpuI4I8tQUwiwU-6SljzCKRryjjzAKLrNpOc480VdPrSZkV-6EEvVS8n_UkpMpCA/exec?username=${encodeURIComponent(username)}`; // Reemplaza con tu URL
 
     fetch(url)
@@ -237,6 +243,18 @@
     };
     html2pdf().set(opt).from(element).save();
   }
+
+  // Al cargar la página
+  window.onload = () => {
+    const username = obtenerParametroUsername();
+    if (username) {
+      // Oculta el formulario si hay parámetro
+      document.getElementById('username').style.display = 'none';
+      document.querySelector('button[onclick="consultar()"]').style.display = 'none';
+      consultar(username);
+    }
+  };
+  
 </script>
 </body>
 </html>
